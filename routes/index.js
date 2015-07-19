@@ -12,6 +12,7 @@
 
 		//AUTOLOAD
 		router.param('quizId', quizController.load);
+		router.param('commentId', commentController.load);
 
 		//SESSION
 		router.get('/login', sessionController.new);
@@ -23,19 +24,20 @@
 
 		//QUIZES
 		router.get('/quizes', quizController.index);
-		router.get('/quizes/new', quizController.new);
+		router.get('/quizes/new', sessionController.loginRequired, quizController.new);
 		router.get('/quizes/:quizId(\\d+)', quizController.show);
 		router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
-		router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
+		router.get('/quizes/:quizId(\\d+)/edit', sessionController.loginRequired, quizController.edit);
 		
 
-		router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
+		router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.destroy);
 
-		router.put('/quizes/:quizId(\\d+)', quizController.update);
+		router.put('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.update);
 
-		router.post('/quizes/create', quizController.create);				
+		router.post('/quizes/create', sessionController.loginRequired, quizController.create);				
 
 		//COMENTARIOS
+		router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish', commentController.publish);
 		router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);	
 		router.post('/quizes/:quizId(\\d+)/comments', commentController.create);
 
